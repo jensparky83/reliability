@@ -5,11 +5,9 @@
 Fitting a model to ALT data
 '''''''''''''''''''''''''''
 
-.. note:: This document and the associated functions are a work in progress. This notice will be removed when the models are available in the PyPI release of reliability.
-
 Before reading this section, you should be familiar with `ALT probability plots <https://reliability.readthedocs.io/en/latest/ALT%20probability%20plots.html>`_, and `Fitting distributions <https://reliability.readthedocs.io/en/latest/Fitting%20a%20specific%20distribution%20to%20data.html>`_ to non-ALT datasets.
 
-The module ``reliability.ALT`` contains fitting function for 15 different ALT life-stress models. Each model is a combination of the life model with the scale or location parameter replaced with a life-stress model. For example, the Weibull-Exponential model is found by replacing the :math:`\alpha` parameter with the equation for the exponential life-stress model as follows:
+The module ``reliability.ALT_fitters`` contains fitting function for 20 different ALT life-stress models. Each model is a combination of the life model with the scale or location parameter replaced with a life-stress model. For example, the Weibull-Exponential model is found by replacing the :math:`\alpha` parameter with the equation for the exponential life-stress model as follows:
 
 :math:`\text{Weibull PDF:} \hspace{40mm} f(t) = \frac{\beta t^{ \beta - 1}}{ \alpha^ \beta} .exp \left(-(\frac{t}{\alpha })^ \beta \right)`
 
@@ -27,11 +25,14 @@ The correct substitutions for each type of model are:
 
 :math:`\text{Lognormal:} \hspace{5mm} \mu = ln \left( L(T) \right)`
 
+:math:`\text{Exponential:} \hspace{3mm} \lambda = \frac{1}{L(T)}`
+
 The `life models <https://reliability.readthedocs.io/en/latest/Equations%20of%20supported%20distributions.html>`_ available are:
 
 - Weibull_2P
 - Normal_2P
 - Lognormal_2P
+- Expon_1P
 
 The life-stress models available are:
 
@@ -59,7 +60,7 @@ Inputs:
 -   print_results - True/False. Default is True
 -   show_plot - True/False. Default is True
 -   CI - confidence interval for estimating confidence limits on parameters. Must be between 0 and 1. Default is 0.95 for 95% CI.
--   initial_guess - starting values for [a,n]. Default is [500000,-1.5]. Optional input. If fitting fails, you will be prompted to try a better initial guess and you can use this input to do it.
+-   initial_guess - starting values for [a,n]. Default is calculated using a curvefit to failure data. Optional input. If fitting fails, you will be prompted to try a better initial guess and you can use this input to do it.
 
 Outputs:
 
@@ -85,21 +86,21 @@ In the following example, we will fit the Weibull-Power model to an ALT dataset 
 
 .. code:: python
 
-    from reliability.ALT import Fit_Weibull_Power
+    from reliability.ALT_fitters import Fit_Weibull_Power
     from reliability.Datasets import ALT_load2
     import matplotlib.pyplot as plt
     data = ALT_load2()
-    results = Fit_Weibull_Power(failures=data.failures,failure_stress=data.failure_stresses,right_censored=data.right_censored,right_censored_stress=data.right_censored_stresses,use_level_stress=60)
+    Fit_Weibull_Power(failures=data.failures,failure_stress=data.failure_stresses,right_censored=data.right_censored,right_censored_stress=data.right_censored_stresses,use_level_stress=60)
     plt.show()
     
     '''
     Results from Fit_Weibull_Power (95% CI):
                Point Estimate  Standard Error       Lower CI      Upper CI
     Parameter                                                             
-    a           398816.334596   519397.494927 -619184.049122  1.416817e+06
-    n               -1.417306        0.243944      -1.895427 -9.391838e-01
+    a           398816.280655   519397.785342 -619184.672265  1.416817e+06
+    n               -1.417306        0.243944      -1.895428 -9.391834e-01
     beta             3.017297        0.716426       1.894563  4.805374e+00
-    At the use level stress of 60 , the mean life is 1075.32844
+    At the use level stress of 60 , the mean life is 1075.32841
     '''
     
 .. image:: images/Weibull_power.png
@@ -108,7 +109,7 @@ In this second example, we will fit a dual stress model to a dual stress data se
 
 .. code:: python
 
-    from reliability.ALT import Fit_Weibull_Power_Exponential
+    from reliability.ALT_fitters import Fit_Weibull_Power_Exponential
     from reliability.Datasets import ALT_temperature_voltage
     import matplotlib.pyplot as plt
     data = ALT_temperature_voltage()
@@ -119,11 +120,16 @@ In this second example, we will fit a dual stress model to a dual stress data se
     Results from Fit_Weibull_Power_Exponential (95% CI):
                Point Estimate  Standard Error     Lower CI     Upper CI
     Parameter                                                          
-    a             3404.486466      627.676350  2174.263426  4634.709506
-    c                0.087610        0.141217    -0.189171     0.364391
+    a             3404.486044      627.680074  2174.255705  4634.716383
+    c                0.087610        0.141218    -0.189172     0.364393
     n               -0.713424        0.277561    -1.257434    -0.169413
-    beta             4.997525        1.173997     3.153511     7.919826
-    At the use level stresses of 325 and 0.5 , the mean life is 4673.15311
+    beta             4.997527        1.173998     3.153512     7.919829
+    At the use level stresses of 325 and 0.5 , the mean life is 4673.15246
     '''
 
 .. image:: images/power_expon_plot.png
+
+**References:**
+
+- Probabilistic Physics of Failure Approach to Reliability (2017), by M. Modarres, M. Amiri, and C. Jackson. pp. 136-168
+- Accelerated Life Testing Data Analysis Reference - ReliaWiki, Reliawiki.com, 2019. [`Online <http://reliawiki.com/index.php/Accelerated_Life_Testing_Data_Analysis_Reference>`_].

@@ -9,12 +9,13 @@ There are a few datasets that have been included with reliability that users may
 
 **Standard datasets**
 
-- automotive - 10 failures, 21 right censored.
-- defective_sample - 1350 failures, 12296 right censored. It exhibits the behavior of a defective sample (aka. Limited fraction defective).
+- automotive - 10 failures, 21 right censored. It is used in `this example <https://reliability.readthedocs.io/en/latest/Kaplan-Meier%20estimate%20of%20reliability.html>`_
+- defective_sample - 1350 failures, 12296 right censored. It exhibits the behavior of a defective sample (also known as Limited failure population or Defective subpopulation).
+- electronics - 10 failures, 4072 right censored. It is used in `this example <https://reliability.readthedocs.io/en/latest/Fitting%20a%20specific%20distribution%20to%20data.html#using-fit-weibull-2p-grouped-for-large-data-sets>`_.
 
 **ALT Datasets**
 
-- ALT_temperature - conducted at 3 temperatures. 35 failures, 102 right censored.
+- ALT_temperature - conducted at 3 temperatures. 35 failures, 102 right censored. For example usage of many of the ALT Datasets see the `examples here <https://reliability.readthedocs.io/en/latest/Fitting%20a%20model%20to%20ALT%20data.html>`_.
 - ALT_temperature2 - conducted at 4 temperatures. 40 failures, 20 right censored.
 - ALT_temperature3 - conducted at 3 temperatures. 30 failures, 0 right censored.
 - ALT_load - conducted at 3 loads. 20 failures, 0 censored.
@@ -65,8 +66,9 @@ The following example shows how to import a dataset and use it. Note that we mus
     Results from Fit_Weibull_2P (95% CI):
                Point Estimate  Standard Error      Lower CI       Upper CI
     Parameter                                                             
-    Alpha       134689.767900    42803.509190  72248.433622  251096.565941
-    Beta             1.153904        0.296028      0.697909       1.907835
+    Alpha       140882.303527    49299.609699  70956.382925  279718.647273
+    Beta             1.132769        0.301468      0.672370       1.908422
+    Log-Likelihood: -128.98350896528038
     '''
 
 If you have an interesting dataset, please email me (m.reid854@gmail.com) and I may include it in this database.

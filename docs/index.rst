@@ -56,6 +56,7 @@ Contents:
   Reliability growth
   Optimal replacement time
   ROCOF
+  Mean cumulative function
 
 .. toctree::
   :maxdepth: 1
@@ -66,13 +67,13 @@ Contents:
   Fracture mechanics
   Creep
   Palmgren-Miner linear damage model
+  Acceleration factor
   Solving simultaneous equations with sympy
 
 .. toctree::
   :maxdepth: 1
   :caption: Accelerated Life Testing
 
-  Acceleration factor
   ALT probability plots
   Fitting a model to ALT data
 
@@ -80,19 +81,32 @@ Contents:
   :maxdepth: 1
   :caption: Other functions and data
   
+  Similar Distributions
+  Convert dataframe to grouped lists
+  Crosshairs
+  Histogram
+  Make right censored data
+  Datasets
+
+.. toctree::
+  :maxdepth: 1
+  :caption: Reliability testing
+  
   One sample proportion
   Two proportion test
   Sample size required for no failures
   Sequential sampling chart
-  Convert dataframe to grouped lists
-  Datasets
+  Reliability test planner
 
 .. toctree::
   :maxdepth: 1
   :caption: Administration
   
+  Changelog
+  Development roadmap
   Citing reliability in your work
   How to request or contribute a new feature
   How to get help
+  How to donate to the project
   About the author
   Credits to those who helped

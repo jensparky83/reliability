@@ -7,7 +7,7 @@ ALT probability plots
 
 Before reading this section, you should be familiar with what a probability plot is and how to use it. For a detailed explaination, please see the section on `probability plots <https://reliability.readthedocs.io/en/latest/Probability%20plots.html>`_.
 
-The module ``reliability.ALT`` contains three ALT probability plotting functions. These functions are:
+The module ``reliability.ALT_probability_plotting`` contains four ALT probability plotting functions. These functions are:
 
 - ALT_probability_plot_Weibull
 - ALT_probability_plot_Lognormal
@@ -43,7 +43,7 @@ In the following example we will use a dataset from ``reliability.Datasets`` whi
 
 .. code:: python
 
-    from reliability.ALT import ALT_probability_plot_Weibull, ALT_probability_plot_Lognormal
+    from reliability.ALT_probability_plotting import ALT_probability_plot_Weibull, ALT_probability_plot_Lognormal
     from reliability.Datasets import ALT_temperature
     import matplotlib.pyplot as plt
     plt.figure()
@@ -57,66 +57,67 @@ In the following example we will use a dataset from ``reliability.Datasets`` whi
     '''
     ALT Weibull probability plot results:
       stress  original alpha  original beta     new alpha  common beta beta change
-          40    13716.624604       2.232583  22815.702436     1.490394     -33.24%
-          60     7405.866698       1.248765   6813.643461     1.490394     +19.35%
-          80     1801.245476       1.421726   1822.550024     1.490394      +4.83%
-    Total AICc: 693.3617469774094
-    Total BIC: 700.5432420343159
+          40    21671.954375       1.625115  21671.954523     1.519015      -6.53%
+          60     6628.557163       1.315739   6628.557053     1.519015     +15.45%
+          80     1708.487268       1.397979   1831.456045     1.519015      +8.66%
+    Total AICc: 693.399657861714
+    Total BIC: 700.5811529186203
 
     ALT Lognormal probability plot results:
       stress  original mu  original sigma    new mu  common sigma sigma change
-          40     9.815427        1.008857  9.717927      0.939836       -6.84%
-          60     8.644293        1.187866  8.507180      0.939836      -20.88%
-          80     7.140811        0.770266  7.147848      0.939836      +22.01%
-    Total AICc: 690.9683703992655
-    Total BIC: 698.1498654561719
+          40     9.814749        1.008337  9.717867      0.939793        -6.8%
+          60     8.644075        1.187552  8.507165      0.939793      -20.86%
+          80     7.141321        0.770355  7.147846      0.939793      +21.99%
+    Total AICc: 690.9683704897413
+    Total BIC: 698.1498655466478
     '''
     
-.. image:: images/ALT_probability_plot_1.png
+.. image:: images/ALT_probability_plot_1_V2.png
 
 In this second example, we examine the difference between ALT_probability_plot_Weibull and ALT_probability_plot_Exponential. A dataset is generated from several Exponential distributions. Ideally, we want to fit a distribution to this data which does not overfit, such that it should have as few parameters as necessary. Both the Weibull and Exponential distributions could be used here, but we know the Exponential is a more appropriate distribution since it was the source of the data. Upon examination of the results, we see very little difference between the common shape (from Exponential) and common beta (from Weibull) and very little difference in the plots, but the AICc and BIC are both lower for the Exponential model indicating that the Exponential distribution should be used preferrentially to the Weibull distribution. Conveniently, the function ALT_probability_plot_Exponential also provides the AICc and BIC results from Weibull and will print a warning if it finds Weibull to be a more appropriate fit than Exponential based on the BIC.
 
 .. code:: python
 
-    from reliability.ALT import ALT_probability_plot_Weibull, ALT_probability_plot_Exponential
+    from reliability.ALT_probability_plotting import ALT_probability_plot_Weibull, ALT_probability_plot_Exponential
     import matplotlib.pyplot as plt
     import numpy as np
     from reliability.Distributions import Exponential_Distribution
-    #create the data using an Exponential distribution
-    np.random.seed(42) #for repeatability
-    data1 = Exponential_Distribution(Lambda=1/100).random_samples(10)
-    data2 = Exponential_Distribution(Lambda=1/500).random_samples(10)
-    data3 = Exponential_Distribution(Lambda=1/3000).random_samples(10)
-    f = np.hstack([data1,data2,data3])
-    f_stress = np.hstack([np.ones_like(data1)*50,np.ones_like(data1)*40,np.ones_like(data1)*30])
-    #plot the data
+
+    # create the data using an Exponential distribution
+    data1 = Exponential_Distribution(Lambda=1 / 100).random_samples(10, seed=42)
+    data2 = Exponential_Distribution(Lambda=1 / 500).random_samples(10, seed=42)
+    data3 = Exponential_Distribution(Lambda=1 / 3000).random_samples(10, seed=42)
+    f = np.hstack([data1, data2, data3])
+    f_stress = np.hstack([np.ones_like(data1) * 50, np.ones_like(data1) * 40, np.ones_like(data1) * 30])
+    # plot the data
     plt.subplot(121)
-    ALT_probability_plot_Exponential(failures=f,failure_stress=f_stress)
+    ALT_probability_plot_Exponential(failures=f, failure_stress=f_stress)
     plt.subplot(122)
-    ALT_probability_plot_Weibull(failures=f,failure_stress=f_stress,common_shape_method='average')
+    ALT_probability_plot_Weibull(failures=f, failure_stress=f_stress, common_shape_method='average')
+    plt.subplots_adjust(right=0.94,wspace=0.35)
     plt.show()
 
     '''
     ALT Exponential probability plot results:
       stress  weibull alpha  weibull beta  new 1/Lambda  common shape shape change
-        30.0    1935.200724      1.341689   1780.530726           1.0      -25.47%
-        40.0     361.340195      0.843440    398.460299           1.0      +18.56%
-        50.0     105.469663      1.074161    102.697008           1.0        -6.9%
-    Total AICc: 429.58115216256
-    Total BIC: 428.9889074415421
-    Total AICc (weibull): 439.3536223694606
-    Total BIC (weibull): 436.02627578456776
+        30.0    3304.561499      1.085037   3080.910234           1.0       -7.84%
+        40.0     527.347816      1.074161    513.485039           1.0        -6.9%
+        50.0     105.469669      1.074162    102.697008           1.0        -6.9%
+    Total AICc: 445.619684746024
+    Total BIC: 445.0274400250061
+    Total AICc (weibull): 455.05689896150307
+    Total BIC (weibull): 451.7295523766102
 
     ALT Weibull probability plot results:
       stress  original alpha  original beta    new alpha  common beta beta change
-        30.0     1935.200724       1.341689  1793.032874     1.026432      -23.5%
-        40.0      361.340195       0.843440   404.943224     1.026432      +21.7%
-        50.0      105.469663       1.074161   103.692500     1.026432      -4.44%
-    Total AICc: 439.3536223694606
-    Total BIC: 436.02627578456776
+        30.0     3304.561499       1.085037  3304.561393     1.077786      -0.67%
+        40.0      527.347816       1.074161   528.205229     1.077786      +0.34%
+        50.0      105.469669       1.074162   105.603906     1.077786      +0.34%
+    Total AICc: 455.05689896150307
+    Total BIC: 451.7295523766102
     '''
 
-.. image:: images/ALT_expon_weib_probplot.png
+.. image:: images/ALT_expon_weib_probplot_V3.png
 
 Getting your input data in the right format
 -------------------------------------------
@@ -160,7 +161,7 @@ The image provided above shows two distributions that fit well. If we apply the 
 
 .. code:: python
 
-    from reliability.ALT import ALT_probability_plot_Normal
+    from reliability.ALT_probability_plotting import ALT_probability_plot_Normal
     from reliability.Datasets import ALT_temperature
     import matplotlib.pyplot as plt
     ALT_probability_plot_Normal(failures=ALT_temperature().failures,failure_stress=ALT_temperature().failure_stresses,right_censored=ALT_temperature().right_censored,right_censored_stress=ALT_temperature().right_censored_stresses)
@@ -177,3 +178,7 @@ The image provided above shows two distributions that fit well. If we apply the 
     '''
 
 .. image:: images/ALT_probability_plot_2.png
+
+**References:**
+
+- Probabilistic Physics of Failure Approach to Reliability (2017), by M. Modarres, M. Amiri, and C. Jackson. pp. 117-137
